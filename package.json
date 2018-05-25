@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "angular": "^1.7.0"
+    "angular": "^1.7.0",
+    "xlsx-js": "^0.8.7"
   }
 }

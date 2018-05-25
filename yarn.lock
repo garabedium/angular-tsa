@@ -5,3 +5,13 @@
 angular@^1.7.0:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/angular/-/angular-1.7.0.tgz#e45d679fc8d81040a4894c7ccc16a4e1ad0a9ca6"
+
+jzip@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/jzip/-/jzip-1.0.0.tgz#78e15fc5cfd3387315900473d7efe85bc52d6f8c"
+
+xlsx-js@^0.8.7:
+  version "0.8.7"
+  resolved "https://registry.yarnpkg.com/xlsx-js/-/xlsx-js-0.8.7.tgz#a9e17a3d31584ad95c79444a19a3a08676623433"
+  dependencies:
+    jzip "^1.0.0"
