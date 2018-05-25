@@ -1,0 +1,2 @@
+- ng-app: scans dom for ng-app attribute on any elements, initializes Angular app to children
+- module: way to group functionality - ex: bookmarks, create bookmarks sub-module

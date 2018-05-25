@@ -1,32 +1,19 @@
-<html ng-app="todoApp">
+<html ng-app="App">
 <head>
   <meta charset="UTF-8">
   <title>Angular TSA</title>
-  <script src="dist/js/angular.min.js"></script>
-  <script src="src/modules/todo.js"></script>
-  <link rel="stylesheet" href="dist/css/todo.css">
+  <!-- <script src="src/modules/todo.js"></script> -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
 </head>
-<body>
+<body ng-controller="MainCtrl">
 
-  <h2>Todo</h2>
-  <div ng-controller="TodoListController as todoList">
-
-      <span>{{todoList.remaining()}} of {{todoList.todos.length}} remaining</span>
-      [ <a href="" ng-click="todoList.archive()">archive</a> ]
-      <ul class="unstyled">
-        <li ng-repeat="todo in todoList.todos">
-          <label class="checkbox">
-            <input type="checkbox" ng-model="todo.done">
-            <span class="done-{{todo.done}}">{{todo.text}}</span>
-          </label>
-        </li>
-      </ul>
-      <form ng-submit="todoList.addTodo()">
-        <input type="text" ng-model="todoList.todoText"  size="30"
-               placeholder="add new todo here">
-        <input class="btn-primary" type="submit" value="add">
-      </form>
+  <div ng-init="hello='world'">
+    <h1>{{hello}}</h1>
+    <input type="text" ng-model="hello">
   </div>
-
+  <h2>{{hello}}</h2>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+  <script src="dist/js/angular.min.js"></script>
+  <script src="src/app.js"></script>
 </body>
 </html>
