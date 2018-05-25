@@ -6,12 +6,25 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
 </head>
 <body ng-controller="MainCtrl">
-
-  <div ng-init="hello='world'">
-    <h1>{{hello}}</h1>
-    <input type="text" ng-model="hello">
-  </div>
   <h2>{{hello}}</h2>
+
+  <h3>Categories</h3>
+  <ul class="categories">
+    <li ng-repeat="category in categories">
+      <a href="#" ng-click="setCurrentCategory(category)">{{category.name}}</a>
+    </li>
+  </ul>
+
+  <h3>Bookmarks</h3>
+  <ul class="categories">
+
+    <li ng-repeat="bookmark in bookmarks | filter:{category:currentCategory.name}">
+       <a href="{{bookmark.url}}" target="_blank">
+        {{bookmark.title}}
+      </a>
+    </li>
+  </ul>
+
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
   <script src="dist/js/angular.min.js"></script>
   <script src="src/app.js"></script>
