@@ -1,7 +1,9 @@
 // module takes in two arguments, a name and a list of dependencies:
 angular.module('App',[])
-  .controller('MainCtrl',function($scope){
+  .controller('MainCtrl',function($scope,$http){
     $scope.hello = "world";
+
+    $scope.presidents = [];
 
     $scope.categories = [
       {"id": 0, "name": "Development"},
@@ -25,6 +27,29 @@ angular.module('App',[])
       $scope.currentCategory = category;
     }
 
+    function isCurrentCategory(category){
+      return $scope.currentCategory !== null && category.name === $scope.currentCategory.name;
+    }
+
+    function hasPresidents(){
+      return $scope.presidents.length > 0
+    }
+
+    function getPresidents(){
+      $http({
+        method: 'GET',
+        url: 'src/data/presidents.json'
+      }).then(function successCallback(response) {
+        $scope.presidents = response.data;
+      }, function errorCallback(response) {
+      });
+    }
+
+
     $scope.setCurrentCategory = setCurrentCategory;
+    $scope.isCurrentCategory = isCurrentCategory;
+    $scope.getPresidents = getPresidents;
+    $scope.hasPresidents = hasPresidents;
+
 
   })

@@ -4,18 +4,32 @@
   <title>Angular TSA</title>
   <!-- <script src="src/modules/todo.js"></script> -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="dist/css/styles.css">
 </head>
 <body ng-controller="MainCtrl">
-  <h2>{{hello}}</h2>
+
+  <button ng-click="setCurrentCategory(null)">Clear Filter</button>
+
+  <button ng-click="getPresidents()">Get Presidents</button>
+
+  <div class="presidents" ng-show="hasPresidents()">
+    <h3>Presidents</h3>
+    <ul>
+      <li ng-repeat="president in presidents">
+        {{president.name}}
+      </li>
+    </ul>
+  </div>
 
   <h3>Categories</h3>
   <ul class="categories">
-    <li ng-repeat="category in categories">
+    <li ng-repeat="category in categories" ng-class="{'active':isCurrentCategory(category)}">
       <a href="#" ng-click="setCurrentCategory(category)">{{category.name}}</a>
     </li>
   </ul>
 
   <h3>Bookmarks</h3>
+
   <ul class="categories">
 
     <li ng-repeat="bookmark in bookmarks | filter:{category:currentCategory.name}">
@@ -25,7 +39,8 @@
     </li>
   </ul>
 
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<!--   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script> -->
+  <script src="dist/js/xls.core.min.js"></script>
   <script src="dist/js/angular.min.js"></script>
   <script src="src/app.js"></script>
 </body>
