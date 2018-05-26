@@ -47,18 +47,25 @@ angular.module('App',[])
     });
   }
 
-  function parseCSV(data){
-
+  function streamCSV(data){
+    Papa.parse(data,{
+      header: true,
+      step: function(results,parser){
+        console.log("row data: ", results.data[0]);
+      },
+      complete: function(){
+        console.log("done");
+      }
+    })
   }
 
   function getClaims(){
     $http({
       method: 'GET',
-      url: 'src/data/claims_partial.csv'
+      // url: 'src/data/claims_partial.csv'
+      url: 'src/data/claims_full.csv'
     }).then(function successCallback(response) {
-      let csvData = Papa.parse(response.data)
-          $scope.claims = csvData.data
-      debugger
+      streamCSV(response.data)
     }, function errorCallback(response) {
     });
   }
