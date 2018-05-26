@@ -76,6 +76,4 @@ angular.module('App',[])
   $scope.hasPresidents = hasPresidents;
   $scope.getClaims = getClaims;
 
-
-
 })
