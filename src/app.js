@@ -1,11 +1,15 @@
 // module takes in two arguments, a name and a list of dependencies:
-angular.module('App',[])
+angular.module('App',["chart.js"])
   .controller('MainCtrl',function($scope,$http){
 
   $scope.hello = "world";
-
   $scope.presidents = [];
   $scope.claims = [];
+
+
+
+  $scope.pieLabels = ["Download Sales", "In-Store Sales", "Mail-Order Sales"];
+  $scope.pieData = [300, 500, 100];
 
   $scope.categories = [
     {"id": 0, "name": "Development"},
@@ -62,8 +66,8 @@ angular.module('App',[])
   function getClaims(){
     $http({
       method: 'GET',
-      // url: 'src/data/claims_partial.csv'
-      url: 'src/data/claims_full.csv'
+      url: 'src/data/claims_partial.csv'
+      // url: 'src/data/claims_full.csv'
     }).then(function successCallback(response) {
       streamCSV(response.data)
     }, function errorCallback(response) {

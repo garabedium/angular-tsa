@@ -10,6 +10,11 @@
 
 <button ng-click="getClaims()">Get Claims</button>
 
+<h2>Mmmm pie chart</h2>
+<canvas id="pie" class="chart chart-pie"
+  chart-data="pieData" chart-labels="pieLabels" chart-options="options">
+</canvas>
+
 <!--   <button ng-click="setCurrentCategory(null)">Clear Filter</button>
   <button ng-click="getPresidents()">Get Presidents</button>
 
@@ -43,6 +48,8 @@
 <!--   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script> -->
   <script src="dist/js/papaparse.min.js"></script>
   <script src="dist/js/angular.min.js"></script>
+  <script src="dist/js/Chart.min.js"></script>
+  <script src="dist/js/angular-chart.min.js"></script>
   <script src="src/app.js"></script>
 </body>
 </html>

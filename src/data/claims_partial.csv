@@ -1,4 +1,4 @@
-Claim Number,Date Received,Incident Date,Airport Code,Airport Name,Airline Name,Claim Type,,,,
+Claim Number,Date Received,Incident Date,Airport Code,Airport Name,Airline Name,Claim Type,Claim Site,Item Category,Close Amount,Disposition
 2010010567154,4-Jan-10,1/3/10 14:30,SLC,Salt Lake City International Airport,Delta Air Lines  ,Property Damage,Checked Baggage,Cosmetics & Grooming,$0.00 ,Deny
 2010010567158,4-Jan-10,1/2/10 0:00,LAX,Los Angeles International Airport ,Southwest Airlines  ,Passenger Property Loss,Checked Baggage,Other,$0.00 ,Deny
 2010010567173,4-Jan-10,1/2/10 5:00,SEA,Seattle-Tacoma International,Delta Air Lines  ,Passenger Property Loss,Checked Baggage,Cameras; Cameras,$0.00 ,Deny
