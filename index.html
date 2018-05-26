@@ -8,8 +8,9 @@
 </head>
 <body ng-controller="MainCtrl">
 
-  <button ng-click="setCurrentCategory(null)">Clear Filter</button>
+<button ng-click="getClaims()">Get Claims</button>
 
+<!--   <button ng-click="setCurrentCategory(null)">Clear Filter</button>
   <button ng-click="getPresidents()">Get Presidents</button>
 
   <div class="presidents" ng-show="hasPresidents()">
@@ -37,10 +38,10 @@
         {{bookmark.title}}
       </a>
     </li>
-  </ul>
+  </ul> -->
 
 <!--   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script> -->
-  <script src="dist/js/xls.core.min.js"></script>
+  <script src="dist/js/papaparse.min.js"></script>
   <script src="dist/js/angular.min.js"></script>
   <script src="src/app.js"></script>
 </body>
