@@ -2,16 +2,13 @@
 angular.module('App',["chart.js"])
   .controller('MainCtrl',function($scope,$http){
 
-  $scope.hello = "world";
-  $scope.claims = [];
+  $scope.months = ["January", "February", "March", "April", "May", "June", "July","August","September","October","November","December"]
 
   $scope.airlineMonthlyClaimLoss = [
     // {"Delta": [65, 59, 80, 81, 56, 55, 40, 30, 18, 24, 17, 55]}
   ];
 
-  $scope.airportAvgMonthlyClaims = [
-
-  ]
+  $scope.airportAvgMonthlyClaims = []
 
   $scope.lineLabels = ["January", "February", "March", "April", "May", "June", "July","August","September","October","November","December"];
   $scope.lineSeries = ['Series A', 'Series B'];
@@ -26,16 +23,24 @@ angular.module('App',["chart.js"])
       header: true,
       step: function(results,parser){
         // console.log("row data: ", results.data[0]);
-        let airline = results.data[0]["Airline Name"].trim()
-        if ($scope.airlineMonthlyClaimLoss.indexOf(airline) === -1 && airline.length > 1){
-          $scope.airlineMonthlyClaimLoss.push(airline)
+        const disposition = results.data[0]["Disposition"].trim().toLowerCase()
+        const validDisposition = (disposition !== "deny" && disposition !== "-")
+
+        if (validDisposition){
+          const airline = results.data[0]["Airline Name"].trim()
+          const claimValue = results.data[0]["Close Amount"].trim().replace(/[$|,]/g,'')
+          // $scope.airlineMonthlyClaimLoss.push({
+          //   airline: airline,
+
+          // })
         }
+
       },
       complete: function(){
         console.log("done");
       }
     })
-    debugger
+
   }
 
   function getClaims(){
