@@ -3,12 +3,13 @@ angular.module('App',["chart.js"])
   .controller('MainCtrl',function($scope,$http){
 
   $scope.months = ["January", "February", "March", "April", "May", "June", "July","August","September","October","November","December"]
+  $scope.claims = []
 
-  $scope.airlineMonthlyClaimLoss = [
-    // {"Delta": [65, 59, 80, 81, 56, 55, 40, 30, 18, 24, 17, 55]}
-  ];
+  // $scope.airlineMonthlyClaimLoss = [
+  //   // {"Delta": [65, 59, 80, 81, 56, 55, 40, 30, 18, 24, 17, 55]}
+  // ];
 
-  $scope.airportAvgMonthlyClaims = []
+  // $scope.airportAvgMonthlyClaims = []
 
   $scope.lineLabels = ["January", "February", "March", "April", "May", "June", "July","August","September","October","November","December"];
   $scope.lineSeries = ['Series A', 'Series B'];
@@ -24,16 +25,20 @@ angular.module('App',["chart.js"])
       step: function(results,parser){
         // console.log("row data: ", results.data[0]);
         const disposition = results.data[0]["Disposition"].trim().toLowerCase()
-        const validDisposition = (disposition !== "deny" && disposition !== "-")
+        const validClaim = (disposition !== "deny" && disposition !== "-")
+        const claimValue = parseFloat( results.data[0]["Close Amount"].trim().replace(/[$|,]/g,'') )
+        const incidentMonth = new Date(results.data[0]["Incident Date"].trim()).getMonth()
+        const airline = (results.data[0]["Airline Name"].trim().length > 1) ? results.data[0]["Airline Name"] : "NA"
+        const airportCode = results.data[0]["Airport Name"].trim()
 
-        if (validDisposition){
-          const airline = results.data[0]["Airline Name"].trim()
-          const claimValue = results.data[0]["Close Amount"].trim().replace(/[$|,]/g,'')
-          // $scope.airlineMonthlyClaimLoss.push({
-          //   airline: airline,
+        $scope.claims.push({
+          airline: airline,
+          claim: claimValue,
+          month: incidentMonth,
+          airportCode: airportCode,
+          validClaim: validClaim
+        })
 
-          // })
-        }
 
       },
       complete: function(){
@@ -46,7 +51,8 @@ angular.module('App',["chart.js"])
   function getClaims(){
     $http({
       method: 'GET',
-      url: 'src/data/claims_partial.csv'
+      url:'src/data/claims-2010-jan-may.csv'
+      // 'src/data/claims_partial.csv'
       // url: 'src/data/claims_full.csv'
     }).then(function successCallback(response) {
       streamCSV(response.data)
