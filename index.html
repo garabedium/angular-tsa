@@ -16,12 +16,25 @@
 <select name="airlines" id="airlines-select">
   <option
     ng-repeat="airline in airlines | orderBy:'name'"
-    value="{{airline.name}}"
+    value="{{airline.id}}"
   >
       {{airline.name}}
   </option>
 </select>
 
+
+  <h2>Line chart ex</h2>
+  <canvas id="line" class="chart chart-line"
+    chart-data="lineData"
+    chart-labels="lineLabels"
+    chart-series="lineSeries"
+    chart-dataset-override="datasetOverride">
+  </canvas>
+
+
+
+
+<!--
 <select name="airports" id="airports-select">
   <option
     ng-repeat="airport in airportCodes | orderBy:'name'"
@@ -30,15 +43,7 @@
       {{airport.name}}
   </option>
 </select>
-
-  <!-- <h2>Line chart ex</h2>
-  <canvas id="line" class="chart chart-line"
-    chart-data="lineData"
-    chart-labels="lineLabels"
-    chart-series="lineSeries"
-    chart-dataset-override="datasetOverride">
-  </canvas>
-   -->
+ -->
 
   <script src="dist/js/papaparse.min.js"></script>
   <script src="dist/js/angular.min.js"></script>

@@ -1,13 +1,10 @@
-// module takes in two arguments, a name and a list of dependencies:
 angular.module('App',["chart.js"])
   .controller('MainCtrl',function($scope,$http){
 
   $scope.init = () => {
     $http({
       method: 'GET',
-      url:'src/data/claims-2010-jan-may.csv'
-      // 'src/data/claims_partial.csv'
-      // url: 'src/data/claims_full.csv'
+      url: 'src/data/claims_full.csv'
     }).then(function successCallback(response) {
       streamCSV(response.data)
     }, function errorCallback(response) {
@@ -16,51 +13,47 @@ angular.module('App',["chart.js"])
 
   $scope.currentAirline = null
   $scope.currentAirportCode = null
-
   $scope.airlines = []
   $scope.airportCodes = []
-
-  const months = ["January", "February", "March", "April", "May", "June", "July","August","September","October","November","December"]
   $scope.claims = []
 
-  // $scope.airlineMonthlyClaimLoss = [
-  //   // {"Delta": [65, 59, 80, 81, 56, 55, 40, 30, 18, 24, 17, 55]}
-  // ];
-  // $scope.airportAvgMonthlyClaims = []
+  const months = ["January", "February", "March", "April", "May", "June", "July","August","September","October","November","December"]
 
-  $scope.lineLabels = ["January", "February", "March", "April", "May", "June", "July","August","September","October","November","December"];
-  $scope.lineSeries = ['Series A', 'Series B'];
-  $scope.lineData = [
-    // $scope.airlineClaimLoss[0]["Delta"],
-    [78, 28, 10, 36, 77, 77, 60, 20, 18, 44, 27, 85],
-    [28, 48, 40, 19, 86, 27, 90, 30, 28, 14, 37, 75]
-  ];
+  $scope.lineLabels = months
+  $scope.lineSeries = ['Claims Losses']
+  $scope.lineData = []
 
-  $scope.setCurrentAirline = (id) => {
+  const setAirlineLossesChart = () => {
+    const data = $scope.airlines.filter((airline) => { return airline.id === $scope.currentAirline })[0].monthlyLosses
+    return $scope.lineData.push(data)
+  }
+
+  const setCurrentAirline = (id) => {
     return $scope.currentAirline = id
   }
 
-  $scope.getMonthlyAirlineLosess = () => {
-    let results = []
-    // Using the currentAirline
-    // Get the total monthly losses
+  const calculateMonthlyAirlineLosess = () => {
+    let calcMonthlyLoss = (airline) => {
+      let monthlyLosses = []
+      months.forEach( (month,index) => {
+        let monthlyClaims = $scope.claims.filter( (claim) => { return claim.airline === airline && claim.month === index && claim.validClaim === true })
+        let monthlyClaimValues = monthlyClaims.reduce( (total,claim) => { return total + claim.claim }, 0)
+        monthlyLosses.push(monthlyClaimValues)
+      })
+      return monthlyLosses
+    }
 
-    // for each month, filter claims by validClaim (true)
-    // reduce claim value
-
-    months.forEach( (month,index) => {
-
+    $scope.airlines.forEach( (airline,index) => {
+      const monthlyLosses = calcMonthlyLoss(airline.name)
+      $scope.airlines[index].monthlyLosses = monthlyLosses
     })
-
-
   }
 
-  function streamCSV(data){
-
+  const streamCSV = (data) => {
     Papa.parse(data,{
       header: true,
       step: function(results,parser){
-        // count += 1
+
         const disposition = results.data[0]["Disposition"].trim().toLowerCase()
         const validClaim = (disposition !== "deny" && disposition !== "-")
         const claimValue = parseFloat( results.data[0]["Close Amount"].trim().replace(/[$|,]/g,'') )
@@ -96,11 +89,14 @@ angular.module('App',["chart.js"])
       complete: function(){
         $scope.airlines.sort( (a,b) => a.name.localeCompare(b.name) )
         $scope.setCurrentAirline($scope.airlines[0].id)
+        calculateMonthlyAirlineLosess()
+        setAirlineLossesChart()
       }
     })
-
   }
 
   $scope.setCurrentAirline = setCurrentAirline;
+  // $scope.calculateMonthlyAirlineLosess = calculateMonthlyAirlineLosess;
+  // $scope.setAirlineLossesChart = setAirlineLossesChart;
 
 })
