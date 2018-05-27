@@ -2,13 +2,25 @@
 angular.module('App',["chart.js"])
   .controller('MainCtrl',function($scope,$http){
 
-  $scope.currentAirline = ''
-  $scope.currentAirportCode = ''
+  $scope.init = () => {
+    $http({
+      method: 'GET',
+      url:'src/data/claims-2010-jan-may.csv'
+      // 'src/data/claims_partial.csv'
+      // url: 'src/data/claims_full.csv'
+    }).then(function successCallback(response) {
+      streamCSV(response.data)
+    }, function errorCallback(response) {
+    });
+  }
 
-  $scope.airlines = {}
-  $scope.airportCodes = {}
+  $scope.currentAirline = null
+  $scope.currentAirportCode = null
 
-  $scope.months = ["January", "February", "March", "April", "May", "June", "July","August","September","October","November","December"]
+  $scope.airlines = []
+  $scope.airportCodes = []
+
+  const months = ["January", "February", "March", "April", "May", "June", "July","August","September","October","November","December"]
   $scope.claims = []
 
   // $scope.airlineMonthlyClaimLoss = [
@@ -24,32 +36,51 @@ angular.module('App',["chart.js"])
     [28, 48, 40, 19, 86, 27, 90, 30, 28, 14, 37, 75]
   ];
 
+  $scope.setCurrentAirline = (id) => {
+    return $scope.currentAirline = id
+  }
+
+  $scope.getMonthlyAirlineLosess = () => {
+    let results = []
+    // Using the currentAirline
+    // Get the total monthly losses
+
+    // for each month, filter claims by validClaim (true)
+    // reduce claim value
+
+    months.forEach( (month,index) => {
+
+    })
+
+
+  }
+
   function streamCSV(data){
-    // let count = 0;
 
     Papa.parse(data,{
       header: true,
-      beforeFirstChunk: function(results,parser){
-        console.log("BFC", results)
-      },
       step: function(results,parser){
         // count += 1
-
         const disposition = results.data[0]["Disposition"].trim().toLowerCase()
         const validClaim = (disposition !== "deny" && disposition !== "-")
         const claimValue = parseFloat( results.data[0]["Close Amount"].trim().replace(/[$|,]/g,'') )
         const month = new Date(results.data[0]["Date Received"].trim()).getMonth()
         const airline = (results.data[0]["Airline Name"].trim().length > 1) ? results.data[0]["Airline Name"].trim() : "NA"
         const airportCode = (results.data[0]["Airport Code"].trim().length > 1) ? results.data[0]["Airport Code"].trim() : "NA"
+        const hasAirline = $scope.airlines.filter((item) => { return item.name === airline }).length > 0
+        const hasAirportCode = $scope.airportCodes.filter((item) => { return item.name === airportCode }).length > 0
 
-        // Airlines hash
-        if (airline !== 'NA' && !$scope.airlines[airline]){
-          $scope.airlines[airline] = airline
+        if (airline !== 'NA' && !hasAirline){
+          $scope.airlines.push({
+            id: $scope.airlines.length + 1,
+            name: airline
+          })
         }
-
-        // Airport Codes hash
-        if (airportCode !== 'NA' && !$scope.airportCodes[airportCode]){
-          $scope.airportCodes[airportCode] = airportCode
+        if (airportCode !== 'NA' && !hasAirportCode){
+          $scope.airportCodes.push({
+            id: $scope.airportCodes.length + 1,
+            name: airportCode
+          })
         }
 
         // Claims
@@ -63,24 +94,13 @@ angular.module('App',["chart.js"])
 
       },
       complete: function(){
-        console.log("done");
+        $scope.airlines.sort( (a,b) => a.name.localeCompare(b.name) )
+        $scope.setCurrentAirline($scope.airlines[0].id)
       }
     })
 
   }
 
-  function getClaims(){
-    $http({
-      method: 'GET',
-      url:'src/data/claims-2010-jan-may.csv'
-      // 'src/data/claims_partial.csv'
-      // url: 'src/data/claims_full.csv'
-    }).then(function successCallback(response) {
-      streamCSV(response.data)
-    }, function errorCallback(response) {
-    });
-  }
-
-  $scope.getClaims = getClaims;
+  $scope.setCurrentAirline = setCurrentAirline;
 
 })
