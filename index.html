@@ -10,8 +10,7 @@
 
 </head>
 <body ng-controller="MainCtrl" ng-init="init()">
-
-<!-- <button id="get-claims" ng-click="getClaims()">Get Claims</button> -->
+<h1>Angular TSA Claims</h1>
 
 <select name="airlines" id="airlines-select">
   <option
@@ -23,10 +22,11 @@
 </select>
 
 
-  <h2>Line chart ex</h2>
+  <h2>{{currentAirline.name}}</h2>
   <canvas id="line" class="chart chart-line"
     chart-data="lineData"
     chart-labels="lineLabels"
+    chart-options="lineOptions"
     chart-series="lineSeries"
     chart-dataset-override="datasetOverride">
   </canvas>

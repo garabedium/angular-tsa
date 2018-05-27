@@ -11,28 +11,30 @@ angular.module('App',["chart.js"])
     });
   }
 
+  const months = ["January", "February", "March", "April", "May", "June", "July","August","September","October","November","December"]
+
   $scope.currentAirline = null
   $scope.currentAirportCode = null
   $scope.airlines = []
   $scope.airportCodes = []
   $scope.claims = []
-
-  const months = ["January", "February", "March", "April", "May", "June", "July","August","September","October","November","December"]
   $scope.totalMonthlyAirlineLosses = {}
-
   $scope.lineLabels = months
-  $scope.lineSeries = ['Current Airline','Average Loss']
+  $scope.lineSeries = ['Avg. Loss (all airlines)']
+  $scope.lineOptions = { legend: {display: true} }
   $scope.lineData = []
 
+
   const setAirlineLossesChart = () => {
-    const airlineLosses = $scope.airlines.filter((airline) => { return airline.id === $scope.currentAirline })[0].monthlyLosses
+    const airlineLosses = $scope.airlines.filter((airline) => { return airline.id === $scope.currentAirline.id })[0].monthlyLosses
     const airlineLossAverages = Object.values($scope.totalMonthlyAirlineLosses).map( (total) => { return total / $scope.airlines.length } )
 
     $scope.lineData.push(airlineLosses, airlineLossAverages)
+    $scope.lineSeries.unshift($scope.currentAirline.name)
   }
 
-  const setCurrentAirline = (id) => {
-    return $scope.currentAirline = id
+  const setCurrentAirline = (airline) => {
+    return $scope.currentAirline = airline
   }
 
   const calculateMonthlyAirlineLosess = () => {
@@ -100,7 +102,7 @@ angular.module('App',["chart.js"])
       },
       complete: function(){
         $scope.airlines.sort( (a,b) => a.name.localeCompare(b.name) )
-        $scope.setCurrentAirline($scope.airlines[0].id)
+        $scope.setCurrentAirline($scope.airlines[0])
         calculateMonthlyAirlineLosess()
         setAirlineLossesChart()
       }
@@ -108,5 +110,6 @@ angular.module('App',["chart.js"])
   }
 
   $scope.setCurrentAirline = setCurrentAirline;
+  // $scope.getCurrentAirlineName = getCurrentAirlineName;
 
 })
