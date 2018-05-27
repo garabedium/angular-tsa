@@ -21,12 +21,14 @@ angular.module('App',["chart.js"])
   $scope.totalMonthlyAirlineLosses = {}
 
   $scope.lineLabels = months
-  $scope.lineSeries = ['Claims Losses']
+  $scope.lineSeries = ['Current Airline','Average Loss']
   $scope.lineData = []
 
   const setAirlineLossesChart = () => {
-    const data = $scope.airlines.filter((airline) => { return airline.id === $scope.currentAirline })[0].monthlyLosses
-    return $scope.lineData.push(data)
+    const airlineLosses = $scope.airlines.filter((airline) => { return airline.id === $scope.currentAirline })[0].monthlyLosses
+    const airlineLossAverages = Object.values($scope.totalMonthlyAirlineLosses).map( (total) => { return total / $scope.airlines.length } )
+
+    $scope.lineData.push(airlineLosses, airlineLossAverages)
   }
 
   const setCurrentAirline = (id) => {
@@ -57,9 +59,6 @@ angular.module('App',["chart.js"])
       const monthlyLosses = calcMonthlyLoss(airline.name)
       $scope.airlines[index].monthlyLosses = monthlyLosses
     })
-  }
-
-  const calculateAirlineLossAverage = () => {
   }
 
   const streamCSV = (data) => {
@@ -103,7 +102,6 @@ angular.module('App',["chart.js"])
         $scope.airlines.sort( (a,b) => a.name.localeCompare(b.name) )
         $scope.setCurrentAirline($scope.airlines[0].id)
         calculateMonthlyAirlineLosess()
-        calculateAirlineLossAverage()
         setAirlineLossesChart()
       }
     })
