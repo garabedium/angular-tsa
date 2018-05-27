@@ -2,13 +2,18 @@
 angular.module('App',["chart.js"])
   .controller('MainCtrl',function($scope,$http){
 
+  $scope.currentAirline = ''
+  $scope.currentAirportCode = ''
+
+  $scope.airlines = {}
+  $scope.airportCodes = {}
+
   $scope.months = ["January", "February", "March", "April", "May", "June", "July","August","September","October","November","December"]
   $scope.claims = []
 
   // $scope.airlineMonthlyClaimLoss = [
   //   // {"Delta": [65, 59, 80, 81, 56, 55, 40, 30, 18, 24, 17, 55]}
   // ];
-
   // $scope.airportAvgMonthlyClaims = []
 
   $scope.lineLabels = ["January", "February", "March", "April", "May", "June", "July","August","September","October","November","December"];
@@ -20,25 +25,41 @@ angular.module('App',["chart.js"])
   ];
 
   function streamCSV(data){
+    // let count = 0;
+
     Papa.parse(data,{
       header: true,
+      beforeFirstChunk: function(results,parser){
+        console.log("BFC", results)
+      },
       step: function(results,parser){
-        // console.log("row data: ", results.data[0]);
+        // count += 1
+
         const disposition = results.data[0]["Disposition"].trim().toLowerCase()
         const validClaim = (disposition !== "deny" && disposition !== "-")
         const claimValue = parseFloat( results.data[0]["Close Amount"].trim().replace(/[$|,]/g,'') )
-        const incidentMonth = new Date(results.data[0]["Incident Date"].trim()).getMonth()
-        const airline = (results.data[0]["Airline Name"].trim().length > 1) ? results.data[0]["Airline Name"] : "NA"
-        const airportCode = results.data[0]["Airport Name"].trim()
+        const month = new Date(results.data[0]["Date Received"].trim()).getMonth()
+        const airline = (results.data[0]["Airline Name"].trim().length > 1) ? results.data[0]["Airline Name"].trim() : "NA"
+        const airportCode = (results.data[0]["Airport Code"].trim().length > 1) ? results.data[0]["Airport Code"].trim() : "NA"
 
+        // Airlines hash
+        if (airline !== 'NA' && !$scope.airlines[airline]){
+          $scope.airlines[airline] = airline
+        }
+
+        // Airport Codes hash
+        if (airportCode !== 'NA' && !$scope.airportCodes[airportCode]){
+          $scope.airportCodes[airportCode] = airportCode
+        }
+
+        // Claims
         $scope.claims.push({
           airline: airline,
           claim: claimValue,
-          month: incidentMonth,
+          month: month,
           airportCode: airportCode,
           validClaim: validClaim
         })
-
 
       },
       complete: function(){
