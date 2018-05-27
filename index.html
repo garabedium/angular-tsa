@@ -5,44 +5,50 @@
   <!-- <script src="src/modules/todo.js"></script> -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="dist/css/styles.css">
+  <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
+  <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
+
 </head>
-<body ng-controller="MainCtrl">
+<body ng-controller="MainCtrl" ng-init="init()">
 
-<button ng-click="getClaims()">Get Claims</button>
+<!-- <button id="get-claims" ng-click="getClaims()">Get Claims</button> -->
 
-<!--   <button ng-click="setCurrentCategory(null)">Clear Filter</button>
-  <button ng-click="getPresidents()">Get Presidents</button>
+<select name="airlines" id="airlines-select">
+  <option
+    ng-repeat="airline in airlines | orderBy:'name'"
+    value="{{airline.id}}"
+  >
+      {{airline.name}}
+  </option>
+</select>
 
-  <div class="presidents" ng-show="hasPresidents()">
-    <h3>Presidents</h3>
-    <ul>
-      <li ng-repeat="president in presidents">
-        {{president.name}}
-      </li>
-    </ul>
-  </div>
 
-  <h3>Categories</h3>
-  <ul class="categories">
-    <li ng-repeat="category in categories" ng-class="{'active':isCurrentCategory(category)}">
-      <a href="#" ng-click="setCurrentCategory(category)">{{category.name}}</a>
-    </li>
-  </ul>
+  <h2>Line chart ex</h2>
+  <canvas id="line" class="chart chart-line"
+    chart-data="lineData"
+    chart-labels="lineLabels"
+    chart-series="lineSeries"
+    chart-dataset-override="datasetOverride">
+  </canvas>
 
-  <h3>Bookmarks</h3>
 
-  <ul class="categories">
 
-    <li ng-repeat="bookmark in bookmarks | filter:{category:currentCategory.name}">
-       <a href="{{bookmark.url}}" target="_blank">
-        {{bookmark.title}}
-      </a>
-    </li>
-  </ul> -->
 
-<!--   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script> -->
+<!--
+<select name="airports" id="airports-select">
+  <option
+    ng-repeat="airport in airportCodes | orderBy:'name'"
+    value="{{airport.name}}"
+  >
+      {{airport.name}}
+  </option>
+</select>
+ -->
+
   <script src="dist/js/papaparse.min.js"></script>
   <script src="dist/js/angular.min.js"></script>
+  <script src="dist/js/Chart.min.js"></script>
+  <script src="dist/js/angular-chart.min.js"></script>
   <script src="src/app.js"></script>
 </body>
 </html>
