@@ -11,35 +11,49 @@ angular.module('App',["chart.js"])
     });
   }
 
+  const months = ["January", "February", "March", "April", "May", "June", "July","August","September","October","November","December"]
+
   $scope.currentAirline = null
   $scope.currentAirportCode = null
   $scope.airlines = []
   $scope.airportCodes = []
   $scope.claims = []
-
-  const months = ["January", "February", "March", "April", "May", "June", "July","August","September","October","November","December"]
-
+  $scope.totalMonthlyAirlineLosses = {}
   $scope.lineLabels = months
-  $scope.lineSeries = ['Claims Losses']
+  $scope.lineSeries = ['Avg. Loss (all airlines)']
+  $scope.lineOptions = { legend: {display: true} }
   $scope.lineData = []
 
+
   const setAirlineLossesChart = () => {
-    const data = $scope.airlines.filter((airline) => { return airline.id === $scope.currentAirline })[0].monthlyLosses
-    return $scope.lineData.push(data)
+    const airlineLosses = $scope.airlines.filter((airline) => { return airline.id === $scope.currentAirline.id })[0].monthlyLosses
+    const airlineLossAverages = Object.values($scope.totalMonthlyAirlineLosses).map( (total) => { return total / $scope.airlines.length } )
+
+    $scope.lineData.push(airlineLosses, airlineLossAverages)
+    $scope.lineSeries.unshift($scope.currentAirline.name)
   }
 
-  const setCurrentAirline = (id) => {
-    return $scope.currentAirline = id
+  const setCurrentAirline = (airline) => {
+    return $scope.currentAirline = airline
   }
 
   const calculateMonthlyAirlineLosess = () => {
     let calcMonthlyLoss = (airline) => {
       let monthlyLosses = []
+
       months.forEach( (month,index) => {
         let monthlyClaims = $scope.claims.filter( (claim) => { return claim.airline === airline && claim.month === index && claim.validClaim === true })
         let monthlyClaimValues = monthlyClaims.reduce( (total,claim) => { return total + claim.claim }, 0)
+
+        if ($scope.totalMonthlyAirlineLosses[index]){
+          $scope.totalMonthlyAirlineLosses[index] += monthlyClaimValues
+        } else {
+          $scope.totalMonthlyAirlineLosses[index] = monthlyClaimValues
+        }
+
         monthlyLosses.push(monthlyClaimValues)
       })
+
       return monthlyLosses
     }
 
@@ -69,6 +83,7 @@ angular.module('App',["chart.js"])
             name: airline
           })
         }
+
         if (airportCode !== 'NA' && !hasAirportCode){
           $scope.airportCodes.push({
             id: $scope.airportCodes.length + 1,
@@ -76,7 +91,6 @@ angular.module('App',["chart.js"])
           })
         }
 
-        // Claims
         $scope.claims.push({
           airline: airline,
           claim: claimValue,
@@ -88,7 +102,7 @@ angular.module('App',["chart.js"])
       },
       complete: function(){
         $scope.airlines.sort( (a,b) => a.name.localeCompare(b.name) )
-        $scope.setCurrentAirline($scope.airlines[0].id)
+        $scope.setCurrentAirline($scope.airlines[0])
         calculateMonthlyAirlineLosess()
         setAirlineLossesChart()
       }
@@ -96,7 +110,6 @@ angular.module('App',["chart.js"])
   }
 
   $scope.setCurrentAirline = setCurrentAirline;
-  // $scope.calculateMonthlyAirlineLosess = calculateMonthlyAirlineLosess;
-  // $scope.setAirlineLossesChart = setAirlineLossesChart;
+  // $scope.getCurrentAirlineName = getCurrentAirlineName;
 
 })
