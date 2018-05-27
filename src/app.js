@@ -18,6 +18,7 @@ angular.module('App',["chart.js"])
   $scope.claims = []
 
   const months = ["January", "February", "March", "April", "May", "June", "July","August","September","October","November","December"]
+  $scope.totalMonthlyAirlineLosses = {}
 
   $scope.lineLabels = months
   $scope.lineSeries = ['Claims Losses']
@@ -35,11 +36,20 @@ angular.module('App',["chart.js"])
   const calculateMonthlyAirlineLosess = () => {
     let calcMonthlyLoss = (airline) => {
       let monthlyLosses = []
+
       months.forEach( (month,index) => {
         let monthlyClaims = $scope.claims.filter( (claim) => { return claim.airline === airline && claim.month === index && claim.validClaim === true })
         let monthlyClaimValues = monthlyClaims.reduce( (total,claim) => { return total + claim.claim }, 0)
+
+        if ($scope.totalMonthlyAirlineLosses[index]){
+          $scope.totalMonthlyAirlineLosses[index] += monthlyClaimValues
+        } else {
+          $scope.totalMonthlyAirlineLosses[index] = monthlyClaimValues
+        }
+
         monthlyLosses.push(monthlyClaimValues)
       })
+
       return monthlyLosses
     }
 
@@ -47,6 +57,9 @@ angular.module('App',["chart.js"])
       const monthlyLosses = calcMonthlyLoss(airline.name)
       $scope.airlines[index].monthlyLosses = monthlyLosses
     })
+  }
+
+  const calculateAirlineLossAverage = () => {
   }
 
   const streamCSV = (data) => {
@@ -69,6 +82,7 @@ angular.module('App',["chart.js"])
             name: airline
           })
         }
+
         if (airportCode !== 'NA' && !hasAirportCode){
           $scope.airportCodes.push({
             id: $scope.airportCodes.length + 1,
@@ -76,7 +90,6 @@ angular.module('App',["chart.js"])
           })
         }
 
-        // Claims
         $scope.claims.push({
           airline: airline,
           claim: claimValue,
@@ -90,13 +103,12 @@ angular.module('App',["chart.js"])
         $scope.airlines.sort( (a,b) => a.name.localeCompare(b.name) )
         $scope.setCurrentAirline($scope.airlines[0].id)
         calculateMonthlyAirlineLosess()
+        calculateAirlineLossAverage()
         setAirlineLossesChart()
       }
     })
   }
 
   $scope.setCurrentAirline = setCurrentAirline;
-  // $scope.calculateMonthlyAirlineLosess = calculateMonthlyAirlineLosess;
-  // $scope.setAirlineLossesChart = setAirlineLossesChart;
 
 })
