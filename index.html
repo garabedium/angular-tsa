@@ -12,25 +12,25 @@
 <body ng-controller="MainCtrl" ng-init="init()">
 <h1>Angular TSA Claims</h1>
 
-<select name="airlines" id="airlines-select">
-  <option
-    ng-repeat="airline in airlines | orderBy:'name'"
-    value="{{airline.id}}"
+  <select name="airlines" id="airlines-select"
+    ng-options="airline.name for airline in airlines"
+    ng-model="airline"
+    ng-change="setCurrentAirline()"
   >
-      {{airline.name}}
-  </option>
-</select>
-
+  </select>
 
   <h2>{{currentAirline.name}}</h2>
-  <canvas id="line" class="chart chart-line"
-    chart-data="lineData"
-    chart-labels="lineLabels"
-    chart-options="lineOptions"
-    chart-series="lineSeries"
-    chart-dataset-override="datasetOverride">
-  </canvas>
 
+  <div ng-show="lineData.length > 0">
+    <canvas id="line"
+      class="chart chart-line"
+      chart-data="lineData"
+      chart-labels="lineLabels"
+      chart-options="lineOptions"
+      chart-series="lineSeries"
+      chart-dataset-override="datasetOverride">
+    </canvas>
+  </div>
 
 
 
