@@ -21,6 +21,10 @@
 
   <h2>{{currentAirline.name}}</h2>
 
+  <div ng-show="lineData.length === 0">
+    Loading....
+  </div>
+
   <div ng-show="lineData.length > 0">
     <canvas id="line"
       class="chart chart-line"
