@@ -2,53 +2,83 @@
 <head>
   <meta charset="UTF-8">
   <title>Angular TSA</title>
-  <!-- <script src="src/modules/todo.js"></script> -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
-  <link rel="stylesheet" href="dist/css/styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css"> -->
   <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
   <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
 
+  <style>
+    .column {
+      width: 48%;
+      float: left;
+    }
+    @media screen and (max-width: 820px) {
+      .column {
+          width: 100%;
+          float: none;
+      }
+    }
+  </style>
+
 </head>
 <body ng-controller="MainCtrl" ng-init="init()">
-<h1>Angular TSA Claims</h1>
+<h1 style="text-align: center">Angular TSA Claims</h1>
+<hr>
 
-  <select name="airlines" id="airlines-select"
-    ng-options="airline.name for airline in airlines"
-    ng-model="airline"
-    ng-change="setCurrentAirline()"
-  >
-  </select>
+<div class="wrapper" style="width:95%;margin: 0 auto;">
+  <div class="column" >
+    <h2>{{currentAirline.name}}</h2>
+    <div ng-show="lineData.length === 0">
+      Loading....
+    </div>
 
-  <h2>{{currentAirline.name}}</h2>
-
-  <div ng-show="lineData.length === 0">
-    Loading....
+    <div ng-show="lineData.length > 0">
+      <select name="airlines" id="airlines-select"
+        ng-options="airline.name for airline in airlines"
+        ng-model="airline"
+        ng-change="setCurrentAirline()"
+      >
+      </select>
+      <canvas
+        class="chart chart-line"
+        chart-data="lineData"
+        chart-labels="lineLabels"
+        chart-options="lineOptions"
+        chart-series="lineSeries"
+        chart-dataset-override="datasetOverride">
+      </canvas>
+    </div>
   </div>
 
-  <div ng-show="lineData.length > 0">
-    <canvas id="line"
-      class="chart chart-line"
-      chart-data="lineData"
-      chart-labels="lineLabels"
-      chart-options="lineOptions"
-      chart-series="lineSeries"
+
+  <div class="column">
+    <h2>{{currentAirport.code}}</h2>
+    <small>{{currentAirport.name}}</small>
+    <div ng-show="barData.length === 0">
+      Loading....
+    </div>
+    <div ng-show="barData.length > 0">
+      <select
+        name="airports" id="airports-select"
+        ng-options="airport.code for airport in airports"
+        ng-model="airport"
+        ng-change="setCurrentAirport()"
+      >
+    </div>
+    </select>
+    <canvas
+      class="chart chart-bar"
+      chart-data="barData"
+      chart-labels="barLabels"
+      chart-options="barOptions"
+      chart-series="barSeries"
       chart-dataset-override="datasetOverride">
     </canvas>
   </div>
+</div>
 
-
-
-<!--
-<select name="airports" id="airports-select">
-  <option
-    ng-repeat="airport in airportCodes | orderBy:'name'"
-    value="{{airport.name}}"
-  >
-      {{airport.name}}
-  </option>
-</select>
- -->
-
+<!--   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script> -->
   <script src="dist/js/papaparse.min.js"></script>
   <script src="dist/js/angular.min.js"></script>
   <script src="dist/js/Chart.min.js"></script>
