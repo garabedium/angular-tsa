@@ -12,21 +12,21 @@
 <body ng-controller="MainCtrl" ng-init="init()">
 <h1>Angular TSA Claims</h1>
 
-  <select name="airlines" id="airlines-select"
-    ng-options="airline.name for airline in airlines"
-    ng-model="airline"
-    ng-change="setCurrentAirline()"
-  >
-  </select>
 
+<div class="column" style="width:50%;float:right;display:none;">
   <h2>{{currentAirline.name}}</h2>
-
   <div ng-show="lineData.length === 0">
     Loading....
   </div>
 
   <div ng-show="lineData.length > 0">
-    <canvas id="line"
+    <select name="airlines" id="airlines-select"
+      ng-options="airline.name for airline in airlines"
+      ng-model="airline"
+      ng-change="setCurrentAirline()"
+    >
+    </select>
+    <canvas
       class="chart chart-line"
       chart-data="lineData"
       chart-labels="lineLabels"
@@ -35,19 +35,31 @@
       chart-dataset-override="datasetOverride">
     </canvas>
   </div>
+</div>
 
 
-
-<!--
-<select name="airports" id="airports-select">
-  <option
-    ng-repeat="airport in airportCodes | orderBy:'name'"
-    value="{{airport.name}}"
+<div class="column" style="width:40%;float:left;margin-left:25px;">
+  <h2>{{currentAirport.code}}</h2>
+  <small>{{currentAirport.name}}</small>
+<!--   <div ng-show="barData.length === 0">
+    Loading....
+  </div> -->
+  <select
+    name="airports" id="airports-select"
+    ng-options="airport.code for airport in airports"
+    ng-model="airport"
+    ng-change="setCurrentAirport()"
   >
-      {{airport.name}}
-  </option>
-</select>
- -->
+  </select>
+  <canvas
+    class="chart chart-bar"
+    chart-data="barData"
+    chart-labels="barLabels"
+    chart-options="barOptions"
+    chart-series="barSeries"
+    chart-dataset-override="datasetOverride">
+  </canvas>
+</div>
 
   <script src="dist/js/papaparse.min.js"></script>
   <script src="dist/js/angular.min.js"></script>
