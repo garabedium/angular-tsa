@@ -2,15 +2,23 @@
 <head>
   <meta charset="UTF-8">
   <title>Angular TSA</title>
-  <!-- <script src="src/modules/todo.js"></script> -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
-  <link rel="stylesheet" href="dist/css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css">
   <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
   <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
 
 </head>
 <body ng-controller="MainCtrl" ng-init="init()">
 <h1>Angular TSA Claims</h1>
+
+
+<div class="ui top attached tabular menu">
+  <div class="active item">Tab</div>
+  ipsum dolum
+</div>
+<div class="ui bottom attached active tab segment">
+  <p>lorem ipsum</p>
+  <p></p>
+</div>
 
 
 <div class="column" style="width:50%;float:right;display:none;">
@@ -41,9 +49,9 @@
 <div class="column" style="width:40%;float:left;margin-left:25px;">
   <h2>{{currentAirport.code}}</h2>
   <small>{{currentAirport.name}}</small>
-<!--   <div ng-show="barData.length === 0">
+  <div ng-show="barData.length === 0">
     Loading....
-  </div> -->
+  </div>
   <select
     name="airports" id="airports-select"
     ng-options="airport.code for airport in airports"
@@ -61,6 +69,8 @@
   </canvas>
 </div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
   <script src="dist/js/papaparse.min.js"></script>
   <script src="dist/js/angular.min.js"></script>
   <script src="dist/js/Chart.min.js"></script>

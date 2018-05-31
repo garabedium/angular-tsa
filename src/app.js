@@ -19,6 +19,7 @@ angular.module('App',["chart.js"])
   $scope.airports = []
   $scope.claims = []
   $scope.totalMonthlyAirlineLosses = {}
+  $scope.totalMonthlyAirportLosses = {}
 
   // Airport line chart:
   $scope.lineLabels = months
@@ -43,10 +44,10 @@ angular.module('App',["chart.js"])
 
   const setAirportLossesChart = () => {
     const losses = $scope.airports.filter((airport) => { return airport.id === $scope.currentAirport.id })[0].monthlyLosses
-    // const lossesAverage = Object.values($scope.totalMonthlyAirlineLosses).map( (total) => { return total / $scope.airlines.length } )
+    const lossesAverage = Object.values($scope.totalMonthlyAirlineLosses).map( (total) => { return total / $scope.airlines.length } )
 
-    $scope.barData = [losses]
-    $scope.barSeries = [$scope.currentAirport.code]
+    $scope.barData = [losses,lossesAverage]
+    $scope.barSeries = [$scope.currentAirport.code,'Avg Loss (all airports)']
   }
 
   const hasLineChart = () => {
@@ -75,11 +76,11 @@ angular.module('App',["chart.js"])
         let monthlyClaims = $scope.claims.filter( (claim) => { return claim.airportCode === airport && claim.month === index && claim.validClaim === true })
         let monthlyClaimValues = monthlyClaims.reduce( (total,claim) => { return total + claim.claim }, 0)
 
-        // if ($scope.totalMonthlyAirlineLosses[index]){
-        //   $scope.totalMonthlyAirlineLosses[index] += monthlyClaimValues
-        // } else {
-        //   $scope.totalMonthlyAirlineLosses[index] = monthlyClaimValues
-        // }
+        if ($scope.totalMonthlyAirportLosses[index]){
+          $scope.totalMonthlyAirportLosses[index] += monthlyClaimValues
+        } else {
+          $scope.totalMonthlyAirportLosses[index] = monthlyClaimValues
+        }
 
         monthlyLosses.push(monthlyClaimValues)
       })
