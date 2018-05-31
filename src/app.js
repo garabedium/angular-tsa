@@ -44,7 +44,7 @@ angular.module('App',["chart.js"])
 
   const setAirportLossesChart = () => {
     const losses = $scope.airports.filter((airport) => { return airport.id === $scope.currentAirport.id })[0].monthlyLosses
-    const lossesAverage = Object.values($scope.totalMonthlyAirlineLosses).map( (total) => { return total / $scope.airlines.length } )
+    const lossesAverage = Object.values($scope.totalMonthlyAirportLosses).map( (total) => { return total / $scope.airlines.length } )
 
     $scope.barData = [losses,lossesAverage]
     $scope.barSeries = [$scope.currentAirport.code,'Avg Loss (all airports)']
