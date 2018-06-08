@@ -3,6 +3,7 @@ An AngularJS app to chart TSA claims data from 2010-2013.
 
 ## Getting Started
 - View on Github: https://garabedium.github.io/angular-tsa/
+- Run locally with HTTP-Server via command line: `http-server -o`
 
 ## Tools
 - Framework: [AngularJS 1.7.0](https://angularjs.org/)
